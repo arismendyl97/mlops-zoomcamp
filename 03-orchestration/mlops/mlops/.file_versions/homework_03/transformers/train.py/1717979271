@@ -1,0 +1,37 @@
+if 'transformer' not in globals():
+    from mage_ai.data_preparation.decorators import transformer
+if 'test' not in globals():
+    from mage_ai.data_preparation.decorators import test
+
+
+@transformer
+def transform(data, *args, **kwargs):
+    import pandas as pd
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_squared_error
+    from sklearn.feature_extraction import DictVectorizer
+    onehotDF = pd.DataFrame()
+
+    onehotDF['PULocationID'] = data['PULocationID'].astype(str)
+    onehotDF['DOLocationID'] = data['DOLocationID'].astype(str)
+    onehotDF['duration'] = data['duration']
+    onehotDF = onehotDF.drop_duplicates()
+
+    #onehotDFDict = onehotDF[['PULocationID','DOLocationID']].drop_duplicates().to_dict(orient='records')
+    dataDicts = onehotDF[['PULocationID', 'DOLocationID']].to_dict(orient='records')
+    target = onehotDF['duration'].values
+
+    dicVec = DictVectorizer(sparse=False)
+    #feature_matrix = dicVec.fit_transform(onehotDFDict)
+    feature_matrix = dicVec.fit_transform(dataDicts)
+    n_feature_cols = feature_matrix.shape[1]
+
+    return data
+
+
+@test
+def test_output(output, *args) -> None:
+    """
+    Template code for testing the output of the block.
+    """
+    assert output is not None, 'The output is undefined'

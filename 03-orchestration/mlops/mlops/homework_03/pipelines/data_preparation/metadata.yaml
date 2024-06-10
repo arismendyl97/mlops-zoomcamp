@@ -25,6 +25,7 @@ blocks:
       path: homework_03/transformers/prepare.py
   downstream_blocks:
   - summary_overview_for_prepare
+  - train
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -37,6 +38,24 @@ blocks:
   upstream_blocks:
   - ingest
   uuid: prepare
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file_source:
+      path: homework_03/transformers/train.py
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: train
+  retry_config: null
+  status: executed
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - prepare
+  uuid: train
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
@@ -76,7 +95,7 @@ widgets:
   language: python
   name: summary overview for ingest
   retry_config: null
-  status: executed
+  status: failed
   timeout: null
   type: chart
   upstream_blocks:
@@ -97,7 +116,7 @@ widgets:
   language: python
   name: summary overview for prepare
   retry_config: null
-  status: executed
+  status: failed
   timeout: null
   type: chart
   upstream_blocks:
